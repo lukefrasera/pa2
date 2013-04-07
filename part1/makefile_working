@@ -1,0 +1,20 @@
+Test: solve_system.o affine.cpp pgmImage.o
+	g++ -g -Wno-deprecated -o affine svdcmp.o svbksb.o solve_system.o pgmImage.o affine.cpp `pkg-config --cflags --libs opencv`
+
+pgmImage.o:	pgmImage.cpp pgmImage.h
+	g++ -c pgmImage.cpp
+
+affine.o:	affine.cpp pgmImage.cpp pgmImage.h svdcmp.c
+	g++ -c affine.cpp
+
+svdcmp.o: svdcmp.c
+	gcc -c -g svdcmp.c 
+
+svbksb.o: svbksb.c
+	gcc -c -g svbksb.c
+
+solve_system.o: svdcmp.o svbksb.o solve_system.c 
+	gcc -c -g solve_system.c
+
+clean:
+	rm *.o
